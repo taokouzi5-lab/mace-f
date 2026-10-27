@@ -27,3 +27,6 @@ data/cache/nasa_cmapss/
 data/cache/secom/
 data/cache/neu_steel/
 data/cache/cnc_tool_wear/
+
+# Test-run artifacts (CodeCarbon writes these during pytest)
+results/E_TEST_emissions.csv
