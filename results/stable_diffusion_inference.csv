@@ -1,0 +1,2 @@
+timestamp,experiment_id,model_name,tier,method,task_type,duration_seconds,energy_kwh,co2eq_g,cpu_energy_kwh,gpu_energy_kwh,ram_energy_kwh,country_iso,carbon_intensity,calibration_factor,co2eq_corrected_g,n_samples,device
+2026-07-03T05:51:00.926065+00:00,E_methodD_stable_diffusion,stable_diffusion,T5,D,inference,642.72,0.289409,66.85,0.0,0.0,0.0,GBR,231.0,1.25,83.57,1000,cuda

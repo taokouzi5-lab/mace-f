@@ -1,0 +1,4 @@
+timestamp,experiment_id,model_name,tier,method,task_type,duration_seconds,energy_kwh,co2eq_g,cpu_energy_kwh,gpu_energy_kwh,ram_energy_kwh,country_iso,carbon_intensity,calibration_factor,co2eq_corrected_g,n_samples,device,extra_repeat,extra_dataset_shape,extra_metric_accuracy,extra_metric_f1
+2026-07-03T01:25:01.838355+00:00,E_methodA_random_forest_rep1,random_forest,T2,A,training,1.89,4.2e-05,0.01,0.0,0.0,0.0,GBR,231.0,1.43,0.01,0,cuda,1,"(1253, 590)",0.9331210191082803,0.0
+2026-07-03T01:25:05.649788+00:00,E_methodA_random_forest_rep2,random_forest,T2,A,training,1.89,5.5e-05,0.01,0.0,0.0,0.0,GBR,231.0,1.43,0.02,0,cuda,2,"(1253, 590)",0.9331210191082803,0.0
+2026-07-03T01:25:09.499731+00:00,E_methodA_random_forest_rep3,random_forest,T2,A,training,1.92,4.1e-05,0.01,0.0,0.0,0.0,GBR,231.0,1.43,0.01,0,cuda,3,"(1253, 590)",0.9331210191082803,0.0

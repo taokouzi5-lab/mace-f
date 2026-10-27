@@ -1,0 +1,4 @@
+timestamp,experiment_id,model_name,tier,method,task_type,duration_seconds,energy_kwh,co2eq_g,cpu_energy_kwh,gpu_energy_kwh,ram_energy_kwh,country_iso,carbon_intensity,calibration_factor,co2eq_corrected_g,n_samples,device,extra_repeat,extra_dataset_shape,extra_metric_mae,extra_metric_r2
+2026-07-03T01:25:13.554686+00:00,E_methodA_xgboost_rep1,xgboost,T2,A,training,1.89,4.5e-05,0.01,0.0,0.0,0.0,GBR,231.0,1.43,0.01,0,cuda,1,"(4000, 26)",0.41972580552101135,0.9319762397907465
+2026-07-03T01:25:17.343150+00:00,E_methodA_xgboost_rep2,xgboost,T2,A,training,1.76,3.5e-05,0.01,0.0,0.0,0.0,GBR,231.0,1.43,0.01,0,cuda,2,"(4000, 26)",0.41972580552101135,0.9319762397907465
+2026-07-03T01:25:21.107478+00:00,E_methodA_xgboost_rep3,xgboost,T2,A,training,1.77,4.4e-05,0.01,0.0,0.0,0.0,GBR,231.0,1.43,0.01,0,cuda,3,"(4000, 26)",0.41972580552101135,0.9319762397907465

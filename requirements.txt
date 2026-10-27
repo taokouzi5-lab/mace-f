@@ -1,0 +1,36 @@
+# Core measurement
+codecarbon>=2.7.1
+
+# ML frameworks
+torch>=2.1.0
+torchvision>=0.16.0
+scikit-learn>=1.3.0
+xgboost>=2.0.0
+
+# T5 generative models
+diffusers>=0.24.0
+transformers>=4.36.0
+accelerate>=0.25.0
+
+# OpenAI API (for GPT-4o-mini T5 inference)
+openai>=1.6.0
+
+# Data handling
+pandas>=2.1.0
+numpy>=1.24.0
+Pillow>=10.0.0
+opencv-python>=4.8.0
+
+# GPU monitoring (required by codecarbon)
+pynvml>=11.5.0
+
+# Utilities
+tqdm>=4.66.0
+pyyaml>=6.0
+
+# Dataset auto-download (optional but recommended)
+gdown>=5.2.0          # For NEU Steel Defects (Google Drive)
+kagglehub>=0.3.0      # For NEU Steel Defects & CNC Tool Wear (Kaggle)
+
+# Testing
+pytest>=7.4.0

@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# Experiment logs (keep result CSVs and analysis_summary.md)
+results/*.log
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE / editors
+.vscode/
+.idea/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Downloaded datasets (loaders auto-download them per README)
+data/cache/nasa_cmapss/
+data/cache/secom/
+data/cache/neu_steel/
+data/cache/cnc_tool_wear/

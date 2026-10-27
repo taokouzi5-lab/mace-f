@@ -1,0 +1,4 @@
+timestamp,experiment_id,model_name,tier,method,task_type,duration_seconds,energy_kwh,co2eq_g,cpu_energy_kwh,gpu_energy_kwh,ram_energy_kwh,country_iso,carbon_intensity,calibration_factor,co2eq_corrected_g,n_samples,device,extra_repeat,extra_dataset_shape,extra_metric_accuracy,extra_metric_f1
+2026-07-03T01:29:04.126362+00:00,E_methodA_mobilenet_v2_rep1,mobilenet_v2,T2,A,training,214.51,0.009822,2.27,0.0,0.0,0.0,GBR,231.0,1.43,3.24,0,cuda,1,"(1440, 3, 224, 224)",0.9944444444444445,0.9944444444444445
+2026-07-03T01:32:42.465306+00:00,E_methodA_mobilenet_v2_rep2,mobilenet_v2,T2,A,training,215.73,0.010297,2.38,0.0,0.0,0.0,GBR,231.0,1.43,3.4,0,cuda,2,"(1440, 3, 224, 224)",0.9944444444444445,0.9944444444444445
+2026-07-03T01:36:21.118213+00:00,E_methodA_mobilenet_v2_rep3,mobilenet_v2,T2,A,training,215.95,0.010048,2.32,0.0,0.0,0.0,GBR,231.0,1.43,3.32,0,cuda,3,"(1440, 3, 224, 224)",0.9972222222222222,0.9972220293075906

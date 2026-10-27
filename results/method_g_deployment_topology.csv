@@ -1,0 +1,9 @@
+scenario,pue,pue_source,carbon_intensity,location,total_energy_kwh,co2eq_g
+Factory Floor — China,2.0,factory_floor,582.0,China,0.050146,40.57
+Factory Floor — Germany,2.0,factory_floor,338.0,Germany,0.050146,23.56
+On-Premise DC — UK,1.7,on_premise_datacenter,231.0,UK,0.042624,13.69
+AWS — Ireland,1.15,aws,331.0,Ireland,0.028834,13.27
+AWS — California,1.15,aws,204.0,USA_California,0.028834,8.18
+Azure — Netherlands,1.2,azure,397.0,Netherlands,0.030088,16.6
+Google Cloud — Finland,1.1,google_cloud,54.0,Finland,0.02758,2.07
+Edge Device — Any,1.02,edge_device,13.0,Sweden,0.025574,0.46
