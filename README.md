@@ -4,9 +4,6 @@ A modular Python framework for measuring and comparing the carbon footprint of
 AI models deployed in manufacturing contexts, using CodeCarbon as the core
 measurement instrument.
 
-Developed as part of  Advanced Project
-(, 2025–26).
-
 ## Quick Start
 
 ```bash

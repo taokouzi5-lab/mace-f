@@ -5,7 +5,7 @@ Reads experiment results from results/ and produces 8 figures saved to figures/.
 All charts use a consistent colour-blind-friendly palette, no overlapping text,
 and clean publication formatting.
 
-Usage:  python generate_figures.py
+Usage:  python scripts/generate_figures.py
 """
 
 from __future__ import annotations
@@ -14,18 +14,20 @@ import sys
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
-from matplotlib.patches import Patch
 import numpy as np
 import pandas as pd
+from matplotlib.patches import Patch
 
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-RESULTS_DIR = Path(__file__).resolve().parent / "results"
-FIGURES_DIR = Path(__file__).resolve().parent / "figures"
+# Script lives in scripts/; data and figure outputs are at the repository root.
+REPO_ROOT = Path(__file__).resolve().parents[1]
+RESULTS_DIR = REPO_ROOT / "results"
+FIGURES_DIR = REPO_ROOT / "figures"
 FIGURES_DIR.mkdir(exist_ok=True)
 
 # Colour-blind-friendly palette (Okabe-Ito inspired + tier mapping)
@@ -160,10 +162,6 @@ def fig2_carbon_efficiency() -> None:
 
     fig, ax = plt.subplots(figsize=(10, 6.5))
 
-    # Pre-compute annotation positions with manual nudges to avoid collisions
-    # (co2_x, acc_y, label, nudge_dx, nudge_dy)
-    manual_offsets: dict = {}
-
     for _, row in cls.iterrows():
         tier = row["tier"]
         sz = max(60, row["duration_s"] * 0.06)
@@ -197,7 +195,7 @@ def fig2_carbon_efficiency() -> None:
             name, (cx, cy),
             textcoords="offset points", xytext=best_offset, fontsize=8.5,
             fontweight="bold",
-            arrowprops=dict(arrowstyle="->", lw=0.6, color="#666666", shrinkA=6),
+            arrowprops={"arrowstyle": "->", "lw": 0.6, "color": "#666666", "shrinkA": 6},
         )
         annotated.append((cx + best_offset[0], cy + best_offset[1]))
 
@@ -386,7 +384,7 @@ def fig5_transfer_learning() -> None:
     # Down-arrow from from_scratch to frozen
     ax.annotate(
         "", xy=(1, frozen), xytext=(0, from_s),
-        arrowprops=dict(arrowstyle="<->", lw=1.8, color="#333333"),
+        arrowprops={"arrowstyle": "<->", "lw": 1.8, "color": "#333333"},
     )
     ax.text(0.5, mid_y + 0.0008, f"−{savings_pct:.1f}%",
             ha="center", fontsize=13, fontweight="bold", color="#CC0000")
@@ -396,7 +394,7 @@ def fig5_transfer_learning() -> None:
         "Full fine-tuning\n≈ from scratch",
         xy=(2, values[2]), xytext=(2.4, values[2] * 0.85),
         fontsize=8.5, color="#888888", fontstyle="italic",
-        arrowprops=dict(arrowstyle="->", lw=0.5, color="#888888"),
+        arrowprops={"arrowstyle": "->", "lw": 0.5, "color": "#888888"},
     )
 
     fig.tight_layout(pad=1.2)
@@ -587,12 +585,12 @@ def fig8_training_vs_inference() -> None:
     x = np.arange(len(merged))
     width = 0.32
 
-    bars_train = ax.bar(
+    ax.bar(
         x - width / 2, merged["train_co2_g"], width,
         label="One-Time Training", color="#0072B2",
         edgecolor="white", linewidth=0.3,
     )
-    bars_infer = ax.bar(
+    ax.bar(
         x + width / 2, merged["annual_co2eq_g"], width,
         label="Annual Inference (24/7)", color="#D55E00",
         edgecolor="white", linewidth=0.3,
@@ -655,7 +653,7 @@ if __name__ == "__main__":
         fig6_hyperparameter()
         fig7_annual_deployment()
         fig8_training_vs_inference()
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 — top-level guard prints and exits
         print(f"\nERROR: {exc}", file=sys.stderr)
         import traceback
         traceback.print_exc()

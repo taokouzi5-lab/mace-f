@@ -6,17 +6,16 @@ Produces: figures/fig0_macef_decision_flowchart.png
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
-import numpy as np
+from matplotlib.patches import FancyBboxPatch
 
-FIGURES_DIR = Path(__file__).resolve().parent / "figures"
+# Script lives in scripts/; figure output is at the repository root.
+FIGURES_DIR = Path(__file__).resolve().parents[1] / "figures"
 FIGURES_DIR.mkdir(exist_ok=True)
 
 DPI = 200
@@ -54,8 +53,8 @@ def draw_box(ax, x, y, w, h, text, color=WHITE, edge=DARK, fontsize=9,
 def draw_arrow(ax, x1, y1, x2, y2, color=DARK):
     """Draw an arrow between two points."""
     ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
-                arrowprops=dict(arrowstyle="->", color=color, lw=2.0,
-                                connectionstyle="arc3,rad=0"), zorder=2)
+                arrowprops={"arrowstyle": "->", "color": color, "lw": 2.0,
+                            "connectionstyle": "arc3,rad=0"}, zorder=2)
 
 
 # ── Box-edge helper ──

@@ -11,7 +11,7 @@ References:
 """
 
 from pathlib import Path
-from typing import Dict, Final
+from typing import Final
 
 # ---------------------------------------------------------------------------
 # Project Paths
@@ -25,12 +25,17 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
 # Hardware Specification
+# Measured values, not assumed specs. Data sources:
+#   - nvidia-smi: GPU model (GeForce RTX 3070 Ti Laptop GPU) and VRAM (8 GB)
+#   - WMIC: CPU model (i7-12700H) and installed RAM (16 GB)
+#   - Corroborated by the CodeCarbon run logs under results/ (cpu_model,
+#     gpu_model, ram_total_size columns of the E_method*_emissions.csv files)
 # ---------------------------------------------------------------------------
-HARDWARE: Final[Dict[str, str]] = {
-    "cpu": "Intel i9-13900K",
-    "gpu": "NVIDIA RTX 4090",
-    "vram_gb": "24",
-    "ram_gb": "64",
+HARDWARE: Final[dict[str, str]] = {
+    "cpu": "Intel Core i7-12700H (Alder Lake)",
+    "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+    "vram_gb": "8",
+    "ram_gb": "16",
     "os": "Windows 11",
     "python": "3.11",
 }
@@ -45,7 +50,7 @@ RANDOM_SEED: Final[int] = 42
 # Sourced from CO2 Signal API, IPCC, and national grid operators.
 # References: Lacoste et al. (2019), Patterson et al. (2022)
 # ---------------------------------------------------------------------------
-CARBON_INTENSITY: Final[Dict[str, float]] = {
+CARBON_INTENSITY: Final[dict[str, float]] = {
     "Switzerland": 16.0,
     "Norway": 20.0,
     "France": 56.0,
@@ -69,7 +74,7 @@ CARBON_INTENSITY: Final[Dict[str, float]] = {
 }
 
 # ISO 3166-1 alpha-3 → config country key mapping
-ISO_TO_COUNTRY: Final[Dict[str, str]] = {
+ISO_TO_COUNTRY: Final[dict[str, str]] = {
     "GBR": "UK", "DEU": "Germany", "FRA": "France", "JPN": "Japan",
     "KOR": "South_Korea", "CHN": "China", "IND": "India", "VNM": "Vietnam",
     "MEX": "Mexico", "SRB": "Serbia", "ZAF": "South_Africa", "IRL": "Ireland",
@@ -87,7 +92,7 @@ DEFAULT_COUNTRY: Final[str] = "UK"
 # Power Usage Effectiveness (PUE) by Deployment Topology
 # References: Lacoste et al. (2019), Patterson et al. (2022)
 # ---------------------------------------------------------------------------
-PUE: Final[Dict[str, float]] = {
+PUE: Final[dict[str, float]] = {
     "google_cloud": 1.10,
     "aws": 1.15,
     "azure": 1.20,
@@ -103,7 +108,7 @@ PUE: Final[Dict[str, float]] = {
 # Derived from Fischer (2025) external power meter validation methodology.
 # These are INITIAL ESTIMATES; replace with your own calibration measurements.
 # ---------------------------------------------------------------------------
-CALIBRATION_FACTORS: Final[Dict[str, float]] = {
+CALIBRATION_FACTORS: Final[dict[str, float]] = {
     "T1": 1.58,  # Lightweight CPU workloads (largest relative overhead)
     "T2": 1.43,
     "T3": 1.39,
@@ -114,7 +119,7 @@ CALIBRATION_FACTORS: Final[Dict[str, float]] = {
 # ---------------------------------------------------------------------------
 # CodeCarbon Configuration
 # ---------------------------------------------------------------------------
-CODECARBON_CONFIG: Final[Dict] = {
+CODECARBON_CONFIG: Final[dict] = {
     "measure_power_secs": 15,       # Sampling interval (seconds)
     "offline_mode": True,           # Keep data local (manufacturing OT policy)
     "output_dir": str(RESULTS_DIR),
@@ -131,7 +136,7 @@ CODECARBON_CONFIG: Final[Dict] = {
 # T4: Large DL (50M-500M params)          → ResNet-152, ViT-B/16
 # T5: Generative (>500M params)           → Stable Diffusion, GPT-4o-mini
 # ---------------------------------------------------------------------------
-MODEL_TIERS: Final[Dict[str, str]] = {
+MODEL_TIERS: Final[dict[str, str]] = {
     "linear_regression": "T1",
     "decision_tree": "T1",
     "random_forest": "T2",
@@ -184,7 +189,7 @@ EXPERIMENT_MATRIX: Final[list] = [
 # ---------------------------------------------------------------------------
 # Dataset URLs and Descriptions
 # ---------------------------------------------------------------------------
-DATASETS: Final[Dict[str, Dict[str, str]]] = {
+DATASETS: Final[dict[str, dict[str, str]]] = {
     "secom": {
         "name": "SECOM Semiconductor Manufacturing",
         "url": "https://archive.ics.uci.edu/dataset/179/secom",
@@ -218,7 +223,7 @@ DATASETS: Final[Dict[str, Dict[str, str]]] = {
 # ---------------------------------------------------------------------------
 # Hyperparameter Grid for Method B
 # ---------------------------------------------------------------------------
-HYPERPARAM_GRID: Final[Dict] = {
+HYPERPARAM_GRID: Final[dict] = {
     "batch_sizes": [8, 16, 32, 64],
     "learning_rates": [1e-3, 5e-4, 1e-4, 5e-5],
     # Simplified: test 8 representative combinations
@@ -233,7 +238,7 @@ HYPERPARAM_GRID: Final[Dict] = {
 # ---------------------------------------------------------------------------
 # Inference Scenarios for Method E (Long-term Deployment Simulation)
 # ---------------------------------------------------------------------------
-DEPLOYMENT_SCENARIOS: Final[Dict] = {
+DEPLOYMENT_SCENARIOS: Final[dict] = {
     "continuous_24x7": {
         "inferences_per_day": 86_400,   # 1/sec, 24h
         "days_per_year": 365,

@@ -24,20 +24,22 @@ Usage:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
 
 # ============================================================================
 # Core Data Tables — all values from experiment results
 # ============================================================================
 
-# Tier definitions with measured training carbon (UK grid, calibrated, median of 3 repeats)
-TIER_PROFILES: Dict[str, dict] = {
+# Tier definitions with measured training carbon (UK grid).
+# training_co2_g 口径: sum of the CodeCarbon `emissions` column (kg → g) per rep,
+# median of 3 reps per model, then median of the per-model medians within the tier.
+# Source: results/E_methodA_<model>_rep{1,2,3}_emissions.csv
+TIER_PROFILES: dict[str, dict] = {
     "T1": {
         "label": "Ultra-Lightweight ML",
         "param_range": "<1K parameters",
         "models": ["Linear Regression", "Decision Tree"],
         "data_modality": ["tabular", "time-series"],
-        "training_co2_g": 0.02,          # median across T1 models
+        "training_co2_g": 0.062625671,   # median of per-model medians (3 reps each): lin_reg 0.041478, decision_tree 0.083774
         "training_time_s": 2,
         "accuracy_range": "80–94% (R²)",
         "annual_infer_co2_kg_24x7": 0.50,
@@ -48,7 +50,7 @@ TIER_PROFILES: Dict[str, dict] = {
         "param_range": "1K–10M parameters",
         "models": ["Random Forest", "XGBoost", "MobileNet-v2"],
         "data_modality": ["tabular", "time-series", "image"],
-        "training_co2_g": 1.11,          # median across T2 models: 0.01, 0.01, 3.32
+        "training_co2_g": 0.062602708,   # median of per-model medians (3 reps each): random_forest 0.062603, xgboost 0.056939, mobilenet_v2 2.815484
         "training_time_s": 144,          # median: 2s, 2s, 215s = 2s → but for image, 215s
         "accuracy_range": "93–99.5% (Acc/F1)",
         "annual_infer_co2_kg_24x7": 0.41,
@@ -59,7 +61,7 @@ TIER_PROFILES: Dict[str, dict] = {
         "param_range": "10M–50M parameters",
         "models": ["ResNet-50", "LSTM"],
         "data_modality": ["time-series", "image"],
-        "training_co2_g": 4.30,          # median of 7.90 and 0.70
+        "training_co2_g": 4.782465659,   # median of per-model medians (3 reps each): resnet_50 8.794553, lstm 0.770378
         "training_time_s": 291,          # median of 524s and 47s
         "accuracy_range": "91–99.6% (R²/Acc)",
         "annual_infer_co2_kg_24x7": 0.40,
@@ -70,7 +72,7 @@ TIER_PROFILES: Dict[str, dict] = {
         "param_range": "50M–500M parameters",
         "models": ["ResNet-152", "ViT-B/16"],
         "data_modality": ["image"],
-        "training_co2_g": 20.04,         # median of 18.02 and 21.86 (excluding the outlier ViT rep1 at 56.73)
+        "training_co2_g": 38.235954621,  # median of per-model medians (3 reps each): resnet_152 21.207512, vit_b_16 55.264397
         "training_time_s": 1364,         # median of 1244s and 1481s
         "accuracy_range": "99.3–99.9% (Acc/F1)",
         "annual_infer_co2_kg_24x7": 1.09,
@@ -91,7 +93,7 @@ TIER_PROFILES: Dict[str, dict] = {
 
 # Deployment scenario annual inference multipliers
 # Baseline = single inference energy × annual inferences
-DEPLOYMENT_SCENARIOS: Dict[str, dict] = {
+DEPLOYMENT_SCENARIOS: dict[str, dict] = {
     "on_demand": {
         "label": "On-Demand / Weekly QC",
         "inferences_per_year": 25_000,
@@ -114,7 +116,7 @@ DEPLOYMENT_SCENARIOS: Dict[str, dict] = {
 
 # Geographic location carbon intensity multiplier (relative to UK baseline = 231 gCO2/kWh)
 # Source: Method F experimental data
-LOCATION_FACTORS: Dict[str, dict] = {
+LOCATION_FACTORS: dict[str, dict] = {
     "Sweden":              {"ci": 13,   "factor": 0.06,  "region": "Nordic",        "risk": "MINIMAL"},
     "Switzerland":         {"ci": 16,   "factor": 0.07,  "region": "Central Europe", "risk": "MINIMAL"},
     "Norway":              {"ci": 20,   "factor": 0.09,  "region": "Nordic",        "risk": "MINIMAL"},
@@ -139,7 +141,7 @@ LOCATION_FACTORS: Dict[str, dict] = {
 
 # Infrastructure PUE factors (relative to edge device PUE=1.02 baseline)
 # Source: Method G experimental data
-INFRASTRUCTURE_FACTORS: Dict[str, dict] = {
+INFRASTRUCTURE_FACTORS: dict[str, dict] = {
     "edge_device":            {"pue": 1.02, "factor": 1.00, "label": "Edge Device"},
     "google_cloud":           {"pue": 1.10, "factor": 1.08, "label": "Google Cloud"},
     "aws":                    {"pue": 1.15, "factor": 1.13, "label": "AWS"},
@@ -150,7 +152,7 @@ INFRASTRUCTURE_FACTORS: Dict[str, dict] = {
 }
 
 # Carbon reduction levers (from Methods B, C)
-REDUCTION_LEVERS: Dict[str, dict] = {
+REDUCTION_LEVERS: dict[str, dict] = {
     "transfer_learning_frozen": {
         "method": "C",
         "saving": 0.606,     # 60.6% energy reduction
@@ -208,7 +210,7 @@ class AssessmentResult:
 
     # Decision guidance
     carbon_class: str
-    recommendations: List[str]
+    recommendations: list[str]
     reduction_potential: str
 
 
@@ -265,7 +267,7 @@ class MACEFramework:
         country: str = "UK",
         infrastructure: str = "on_premise_datacenter",
         use_transfer_learning: bool = False,
-        data_modality: Optional[str] = None,
+        data_modality: str | None = None,
     ) -> AssessmentResult:
         """Run a complete carbon assessment for a manufacturing AI deployment.
 
@@ -341,24 +343,28 @@ class MACEFramework:
         country: str,
         infra: str,
         use_tl: bool,
-    ) -> Tuple[str, List[str]]:
-        """Classify carbon impact and generate tier-specific recommendations."""
+    ) -> tuple[str, list[str]]:
+        """Classify carbon impact and generate tier-specific recommendations.
+
+        Carbon class bands follow report Table 4 (kg CO₂e/year):
+          A < 0.1 | B 0.1–1 | C 1–100 | D 100–1000 | E ≥ 1000
+        """
         recs = []
 
-        if total_annual_kg < 0.001:
-            carbon_class = "NEGLIGIBLE — below reporting threshold"
+        if total_annual_kg < 0.1:
+            carbon_class = "A — NEGLIGIBLE — below reporting threshold"
             recs.append("No action required; carbon impact is negligible.")
         elif total_annual_kg < 1.0:
-            carbon_class = "LOW — comparable to a few hours of office PC use"
+            carbon_class = "B — LOW — comparable to a few hours of office PC use"
             recs.append("Monitor annually; no urgent action needed.")
         elif total_annual_kg < 100:
-            carbon_class = "MODERATE — comparable to a short-haul flight (50–100 kg CO₂)"
+            carbon_class = "C — MODERATE — comparable to a short-haul flight (50–100 kg CO₂)"
             recs.append("Consider model downgrade or cloud migration for meaningful reduction.")
         elif total_annual_kg < 1000:
-            carbon_class = "HIGH — comparable to a long-haul flight (500–1000 kg CO₂)"
+            carbon_class = "D — HIGH — comparable to a long-haul flight (500–1000 kg CO₂)"
             recs.append("Immediate action recommended: model downgrade, cloud migration, or edge deployment.")
         else:
-            carbon_class = "CRITICAL — comparable to annual car emissions (>1000 kg CO₂)"
+            carbon_class = "E — CRITICAL — comparable to annual car emissions (>1000 kg CO₂)"
             recs.append("URGENT: Deploy only if essential; prioritise edge + low-carbon grid + lightweight model.")
 
         # Tier-specific guidance
@@ -392,7 +398,7 @@ class MACEFramework:
 # Quick-reference lookup table generator
 # ============================================================================
 
-def generate_decision_table() -> List[dict]:
+def generate_decision_table() -> list[dict]:
     """Generate the full carbon-efficiency decision matrix as a list of dicts.
 
     Crosses: 5 tiers × 3 scenarios × 3 representative locations.
@@ -427,7 +433,6 @@ def generate_decision_table() -> List[dict]:
 # ============================================================================
 
 if __name__ == "__main__":
-    import json
 
     fw = MACEFramework()
 
@@ -481,7 +486,7 @@ if __name__ == "__main__":
         print(f"  Location:          {r.country} (×{r.location_factor})")
         print(f"  Infrastructure:    {r.infrastructure} (×{r.infrastructure_factor})")
         print(f"  Transfer learning: {r.transfer_learning_saving:.0%} saving")
-        print(f"  ─────────────────────────────────────────")
+        print("  ─────────────────────────────────────────")
         print(f"  Training CO₂:      {r.training_co2_g:.3f} g (one-off)")
         print(f"  Single inference:  {r.single_inference_co2_g:.6f} g")
         print(f"  Annual CO₂:        {r.annual_co2eq_kg:.3f} kg/year")
