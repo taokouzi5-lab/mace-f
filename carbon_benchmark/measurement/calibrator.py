@@ -51,7 +51,7 @@ class Calibrator:
     """Manages calibration factor computation and application.
 
     Stores paired measurements and computes tier-aggregated factors.
-    Can export the calibration table for inclusion in the documentation.
+    Can export the calibration table for inclusion in documentation.
 
     Usage:
         >>> cal = Calibrator()

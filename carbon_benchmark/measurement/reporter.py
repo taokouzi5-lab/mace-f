@@ -182,10 +182,10 @@ class ResultReporter:
         print("=" * 65 + "\n")
 
     def export_tables(self, filename: str = "tables.csv") -> Path:
-        """Export aggregated data in a format ready for analysis tables.
+        """Export aggregated data in a tabular format.
 
         Produces a CSV with tier-level aggregates and key comparisons suitable
-        for direct inclusion in the Results chapter.
+        for direct inclusion in reports and documentation.
 
         Args:
             filename: Output CSV filename.
