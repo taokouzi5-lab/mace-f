@@ -3,8 +3,8 @@ import sys
 from pathlib import Path
 
 # When run directly from scripts/, make the repository checkout importable as
-# the `carbon_benchmark` package (flat layout: repo root is the package root).
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+# the `carbon_benchmark` package (package lives in the carbon_benchmark/ subdir).
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from carbon_benchmark.experiments.method_a_baseline_training import run
 from carbon_benchmark.utils.hardware import print_hardware_summary
