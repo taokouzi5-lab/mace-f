@@ -602,3 +602,32 @@ class TestTypes:
             "load_cnc_tool_wear", "get_dataset_info",
         ):
             assert callable(getattr(loader, name))
+
+
+# ---------------------------------------------------------------------------
+# Zip-slip defense
+# ---------------------------------------------------------------------------
+
+class TestSafeExtractall:
+    def test_rejects_path_traversal_member(self, tmp_path: Path) -> None:
+        import io
+
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            zf.writestr("../evil.txt", "payload")
+        buf.seek(0)
+        with zipfile.ZipFile(buf) as zf:
+            with pytest.raises(ValueError, match="Unsafe zip member path"):
+                loader._safe_extractall(zf, tmp_path)
+        assert not (tmp_path.parent / "evil.txt").exists()
+
+    def test_extracts_safe_members(self, tmp_path: Path) -> None:
+        import io
+
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            zf.writestr("data.txt", "content")
+        buf.seek(0)
+        with zipfile.ZipFile(buf) as zf:
+            loader._safe_extractall(zf, tmp_path)
+        assert (tmp_path / "data.txt").read_text() == "content"

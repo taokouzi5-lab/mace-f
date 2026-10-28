@@ -14,6 +14,7 @@ Datasets:
 from __future__ import annotations
 
 import logging
+import zipfile
 from pathlib import Path
 from typing import Dict, Optional, Tuple, Union
 from urllib.request import urlretrieve
@@ -260,6 +261,16 @@ def _find_neu_steel_dir(cache_dir: Path) -> Optional[Path]:
     return None
 
 
+def _safe_extractall(zf: "zipfile.ZipFile", target_dir: Path) -> None:
+    """Extract zip members, rejecting path-traversal entries (zip-slip defense)."""
+    target_root = target_dir.resolve()
+    for member in zf.namelist():
+        member_path = (target_dir / member).resolve()
+        if not member_path.is_relative_to(target_root):
+            raise ValueError(f"Unsafe zip member path: {member!r}")
+    zf.extractall(target_dir)
+
+
 def _download_secom(cache_dir: Path) -> None:
     """Download SECOM from UCI repository."""
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -318,7 +329,7 @@ def _download_neu_steel(cache_dir: Path) -> bool:
         if zip_path.exists() and zip_path.stat().st_size > 100_000:
             logger.info("Extracting NEU Steel Defects...")
             with zipfile.ZipFile(zip_path, "r") as zf:
-                zf.extractall(cache_dir)
+                _safe_extractall(zf, cache_dir)
             zip_path.unlink()  # clean up zip
             logger.info("NEU Steel Defects downloaded and extracted via gdown")
             return True
@@ -392,7 +403,7 @@ def _download_cnc_tool_wear(cache_dir: Path) -> bool:
             urlretrieve(url, zip_path)  # nosec B310
             if zip_path.stat().st_size > 1000:
                 with zipfile.ZipFile(zip_path, "r") as zf:
-                    zf.extractall(cache_dir)
+                    _safe_extractall(zf, cache_dir)
                 zip_path.unlink()
                 logger.info("CNC Tool Wear downloaded via direct URL")
                 return True

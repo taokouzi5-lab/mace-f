@@ -219,7 +219,7 @@ carbon_benchmark/                  # repository root
 ├── scripts/                       # 4 entry points: run_all_experiments, smoketest,
 │                                  # generate_figures, generate_flowchart
 ├── tests/                         # 12 pytest modules
-├── results/                       # 79 CSV files + analysis_summary.md + README.md
+├── results/                       # 78 CSV files + analysis_summary.md + README.md
 ├── figures/                       # 9 generated PNG figures
 ├── docs/calibration.md            # external power-meter guide
 ├── assets/demo.gif                # terminal demo

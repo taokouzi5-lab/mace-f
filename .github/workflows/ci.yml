@@ -5,6 +5,9 @@ on:
     branches: [master, main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -21,13 +24,14 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install package with dev extras
+        # Aliyun mirror for speed in mainland China; PyPI as fallback source.
         run: pip install -e ".[dev]" --index-url https://mirrors.aliyun.com/pypi/simple/ --extra-index-url https://pypi.org/simple/
 
       - name: Lint with ruff
         run: ruff check .
 
       - name: Security scan with bandit (medium severity and above)
-        run: bandit -r carbon_benchmark -ll -q
+        run: bandit -r carbon_benchmark scripts -ll -q
 
       - name: Full test suite with coverage (package-wide >= 50%)
         run: pytest tests/ --cov=carbon_benchmark --cov-report=term-missing --cov-fail-under=50
