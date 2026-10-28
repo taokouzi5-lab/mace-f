@@ -6,3 +6,5 @@ All accept --output-dir, --country, and --model CLI arguments.
 
 from carbon_benchmark.experiments.method_a_baseline_training import run as run_method_a
 from carbon_benchmark.experiments.method_d_baseline_inference import run as run_method_d
+
+__all__ = ["run_method_a", "run_method_d"]

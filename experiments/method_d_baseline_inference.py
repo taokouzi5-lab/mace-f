@@ -16,19 +16,15 @@ import argparse
 from pathlib import Path
 from typing import Dict, List, Optional
 
-import numpy as np
 
 from carbon_benchmark.config import (
-    DEFAULT_COUNTRY,
     MODEL_TIERS,
-    RANDOM_SEED,
     RESULTS_DIR,
 )
 from carbon_benchmark.data.loader import (
     load_secom,
     load_nasa_cmapss,
     load_neu_steel_defects,
-    load_cnc_tool_wear,
 )
 from carbon_benchmark.data.preprocessing import (
     preprocess_tabular,

@@ -20,7 +20,7 @@ References:
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, Tuple
 
 import numpy as np
 

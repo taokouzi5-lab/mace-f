@@ -357,8 +357,8 @@ def main_compact():
     # Horizontal arrows between decision boxes
     for i in range(3):
         _, r, _, _ = _e(COL_X[i], DEC_Y, COL_W, DEC_H)
-        l, _, _, _ = _e(COL_X[i+1], DEC_Y, COL_W, DEC_H)
-        draw_arrow(ax, r, DEC_Y, l, DEC_Y, GRAY)
+        left_x, _, _, _ = _e(COL_X[i+1], DEC_Y, COL_W, DEC_H)
+        draw_arrow(ax, r, DEC_Y, left_x, DEC_Y, GRAY)
 
     # ── Branch boxes below each decision ──
     # Each branch box shows: CONDITION + TIER RECOMMENDATION (combined)

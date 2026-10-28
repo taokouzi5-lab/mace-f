@@ -14,15 +14,13 @@ programmatically from notebooks.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
-import numpy as np
 import pandas as pd
 
 from carbon_benchmark.config import (
     CALIBRATION_FACTORS,
     CARBON_INTENSITY,
-    DEFAULT_COUNTRY,
     DEPLOYMENT_SCENARIOS,
     HYPERPARAM_GRID,
     MODEL_TIERS,
@@ -184,7 +182,7 @@ def run_method_c(
         X_train, X_test, y_train, y_test,
     )
 
-    modes = compare_training_modes("resnet_50", X_train, y_train, X_test, y_test)
+    _ = compare_training_modes("resnet_50", X_train, y_train, X_test, y_test)
     results: List[Dict[str, Any]] = []
 
     for mode_name in ["from_scratch", "frozen_backbone", "full_finetune"]:

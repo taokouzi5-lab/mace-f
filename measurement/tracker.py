@@ -25,7 +25,7 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, Optional
 
 from carbon_benchmark.config import (
     CALIBRATION_FACTORS,
