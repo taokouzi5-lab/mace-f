@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package with dev extras
+        run: pip install -e ".[dev]" --index-url https://mirrors.aliyun.com/pypi/simple/
+
+      - name: Lint with ruff
+        run: ruff check .
+
+      - name: Security scan with bandit (medium severity and above)
+        run: bandit -r carbon_benchmark -ll -q
+
+      - name: Full test suite with coverage (package-wide >= 50%)
+        run: pytest tests/ --cov=carbon_benchmark --cov-report=term-missing --cov-fail-under=50
+
+      - name: Core module coverage (>= 80%)
+        run: >
+          pytest tests/
+          --cov=carbon_benchmark.config
+          --cov=carbon_benchmark.measurement
+          --cov=carbon_benchmark.utils
+          --cov=carbon_benchmark.decision_matrix
+          --cov-fail-under=80
