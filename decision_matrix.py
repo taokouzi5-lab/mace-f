@@ -478,7 +478,12 @@ if __name__ == "__main__":
     print("=" * 72)
 
     for case in cases:
-        r = fw.assess(**{k: v for k, v in case.items() if k != "name"})
+        kwargs = {k: v for k, v in case.items() if k != "name"}
+        kwargs["model_tier"] = kwargs.pop("tier")
+        kwargs["deployment_scenario"] = kwargs.pop("scenario")
+        kwargs["use_transfer_learning"] = kwargs.pop("tl")
+        kwargs["infrastructure"] = kwargs.pop("infra")
+        r = fw.assess(**kwargs)
         print(f"\n{'─' * 72}")
         print(f"Case: {case['name']}")
         print(f"  Tier:              {r.model_tier} — {r.tier_label}")
