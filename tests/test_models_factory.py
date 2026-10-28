@@ -7,7 +7,7 @@ with fakes so no HuggingFace/OpenAI calls happen.
 """
 
 from types import SimpleNamespace
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 import pytest
@@ -19,10 +19,46 @@ from carbon_benchmark.models.generative import (
     create_stable_diffusion_pipeline,
 )
 
-torch = pytest.importorskip("torch")
-pytest.importorskip("torchvision")
+def _load_torch() -> Any:
+    """Skip when torch/torchvision are unavailable (CI minimal env)."""
+    pytest.importorskip("torch")
+    pytest.importorskip("torchvision")
+    import torch
 
-from carbon_benchmark.models import deep_learning as dl  # noqa: E402
+    return torch
+
+
+def _load_dl() -> Any:
+    _load_torch()
+    from carbon_benchmark.models import deep_learning as dl_module
+
+    return dl_module
+
+
+class _LazyModule:
+    """Resolve module attributes on first access.
+
+    ``torch`` / ``dl`` are module-global proxies: torch-free tests never
+    touch them, while the first DL test access performs the importorskips
+    (skipping that test) or loads the real modules.
+    """
+
+    def __init__(self, loader: Callable[[], Any]) -> None:
+        object.__setattr__(self, "_loader", loader)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._loader(), name)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        # Forward writes so monkeypatch.setattr patches the real module.
+        setattr(self._loader(), name, value)
+
+    def __delattr__(self, name: str) -> None:
+        delattr(self._loader(), name)
+
+
+torch = _LazyModule(_load_torch)
+dl = _LazyModule(_load_dl)
 
 
 # ---------------------------------------------------------------------------

@@ -28,6 +28,9 @@ dl = [
 api = [
     "openai>=1.6.0",
 ]
+viz = [
+    "matplotlib>=3.7",
+]
 dev = [
     "pytest>=7.4.0",
     "pytest-cov",

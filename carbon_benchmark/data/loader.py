@@ -265,7 +265,7 @@ def _download_secom(cache_dir: Path) -> None:
     cache_dir.mkdir(parents=True, exist_ok=True)
     base_url = "https://archive.ics.uci.edu/ml/machine-learning-databases/secom"
     for filename in ["secom.data", "secom_labels.data"]:
-        urlretrieve(f"{base_url}/{filename}", cache_dir / filename)
+        urlretrieve(f"{base_url}/{filename}", cache_dir / filename)  # nosec B310
         logger.info(f"  Downloaded {filename}")
 
 
@@ -282,13 +282,13 @@ def _download_cmapss(cache_dir: Path) -> None:
             if url.endswith(".zip"):
                 import zipfile
                 zip_path = cache_dir / "_temp_cmapss.zip"
-                urlretrieve(url, zip_path)
+                urlretrieve(url, zip_path)  # nosec B310
                 with zipfile.ZipFile(zip_path, "r") as zf:
                     zf.extract("train_FD001.txt", cache_dir)
                 zip_path.unlink()
                 logger.info(f"Downloaded and extracted CMAPSS from {url}")
             else:
-                urlretrieve(url, cache_dir / "train_FD001.txt")
+                urlretrieve(url, cache_dir / "train_FD001.txt")  # nosec B310
                 logger.info(f"Downloaded CMAPSS from {url}")
             return
         except Exception:
@@ -389,7 +389,7 @@ def _download_cnc_tool_wear(cache_dir: Path) -> bool:
 
             zip_path = cache_dir / "cnc_temp.zip"
             logger.info(f"Trying direct download: {url}")
-            urlretrieve(url, zip_path)
+            urlretrieve(url, zip_path)  # nosec B310
             if zip_path.stat().st_size > 1000:
                 with zipfile.ZipFile(zip_path, "r") as zf:
                     zf.extractall(cache_dir)

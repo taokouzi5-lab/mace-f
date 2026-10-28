@@ -104,6 +104,7 @@ Optional extras:
 ```bash
 pip install -e ".[dl]"    # PyTorch models: MobileNet-v2, ResNet-50/152, ViT-B/16, LSTM, Stable Diffusion
 pip install -e ".[api]"   # OpenAI model: GPT-4o-mini (requires OPENAI_API_KEY)
+pip install -e ".[viz]"   # Chart generation: scripts/generate_figures.py, scripts/generate_flowchart.py
 ```
 
 ## Experiment Methods

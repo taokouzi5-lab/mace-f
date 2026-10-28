@@ -29,7 +29,7 @@ carbon_benchmark/data/cache/neu_steel/
 carbon_benchmark/data/cache/cnc_tool_wear/
 
 # Test-run artifacts (CodeCarbon writes these during pytest)
-results/E_TEST_emissions.csv
+results/E_TEST*
 
 # Coverage / lint artifacts
 .coverage

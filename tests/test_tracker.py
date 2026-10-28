@@ -140,17 +140,17 @@ class TestCalibrator:
 class TestCarbonTracker:
     """Tests for the CarbonTracker class (context manager mode)."""
 
-    def test_context_manager_lifecycle(self) -> None:
-        """Tracker starts and stops correctly via context manager."""
-        tracker = CarbonTracker("E_TEST", "decision_tree", "A")
+    def test_context_manager_lifecycle(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Tracker starts and stops the backend via the context manager protocol."""
+        created = install_fake_codecarbon(monkeypatch, stop_value=0.001)
+        tracker = CarbonTracker("E_TEST", "decision_tree", "A", output_dir=tmp_path)
         assert tracker.result is None
-        # Context manager should work without errors
-        try:
-            with tracker:
-                pass  # Simulate workload
-        except Exception:
-            pass  # CodeCarbon may fail without actual hardware tracking
-        # Even on error, should attempt stop
+        with tracker:
+            assert created[0].started is True
+        assert tracker.result is not None
+        assert tracker.result.co2eq_g == pytest.approx(1.0)
 
     def test_model_tier_lookup(self) -> None:
         """Tier is resolved from config.MODEL_TIERS."""
