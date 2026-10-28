@@ -23,10 +23,10 @@ Thumbs.db
 .DS_Store
 
 # Downloaded datasets (loaders auto-download them per README)
-data/cache/nasa_cmapss/
-data/cache/secom/
-data/cache/neu_steel/
-data/cache/cnc_tool_wear/
+carbon_benchmark/data/cache/nasa_cmapss/
+carbon_benchmark/data/cache/secom/
+carbon_benchmark/data/cache/neu_steel/
+carbon_benchmark/data/cache/cnc_tool_wear/
 
 # Test-run artifacts (CodeCarbon writes these during pytest)
 results/E_TEST_emissions.csv

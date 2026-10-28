@@ -16,10 +16,11 @@ from typing import Final
 # ---------------------------------------------------------------------------
 # Project Paths
 # ---------------------------------------------------------------------------
-PROJECT_ROOT: Final[Path] = Path(__file__).parent.resolve()
-DATA_DIR: Final[Path] = PROJECT_ROOT / "data" / "cache"
+PACKAGE_ROOT: Final[Path] = Path(__file__).parent.resolve()
+PROJECT_ROOT: Final[Path] = PACKAGE_ROOT.parent
+DATA_DIR: Final[Path] = PACKAGE_ROOT / "data" / "cache"
 RESULTS_DIR: Final[Path] = PROJECT_ROOT / "results"
-LOG_DIR: Final[Path] = PROJECT_ROOT / "results"
+LOG_DIR: Final[Path] = RESULTS_DIR
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 

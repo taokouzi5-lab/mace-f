@@ -339,7 +339,7 @@ class TestGenerateDecisionTable:
 class TestCliDemo:
     def test_main_demo_runs(self, capsys: pytest.CaptureFixture) -> None:
         """Execute the __main__ demo block via runpy (pure computation)."""
-        module_path = REPO_ROOT / "decision_matrix.py"
+        module_path = REPO_ROOT / "carbon_benchmark" / "decision_matrix.py"
         runpy.run_path(str(module_path), run_name="__main__")
         out = capsys.readouterr().out
         assert "MACE-F Carbon-Efficiency Decision Framework" in out
