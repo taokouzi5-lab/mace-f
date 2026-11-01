@@ -30,7 +30,7 @@ jobs:
       - name: Lint with ruff
         run: ruff check .
 
-      - name: Security scan with bandit (medium severity and above)
+      - name: Security scan with bandit (-ll: low severity and above)
         run: bandit -r carbon_benchmark scripts -ll -q
 
       - name: Full test suite with coverage (package-wide >= 50%)
