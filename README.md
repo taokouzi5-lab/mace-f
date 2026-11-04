@@ -18,6 +18,13 @@
 | Where the carbon goes | **63×** spread across deployment locations (Switzerland 16 vs South Africa 1009 gCO₂eq/kWh) |
 | Measurement stack | CodeCarbon **3.2.7** with tier-specific external-power-meter calibration after Fischer (2025), on an NVIDIA RTX 3070 Ti Laptop 8 GB + Intel i7-12700H |
 
+## Related
+
+- **[steel-defect-lab (DefectLens)](https://github.com/taokouzi5-lab/steel-defect-lab)**
+  — a steel surface defect detection platform that uses this framework for
+  carbon-aware model selection (ResNet-18 vs ResNet-50, INT8 quantization) and
+  discloses a per-inference carbon estimate in its API.
+
 ## What it measures
 
 MACE-F is a modular benchmark and decision framework for the carbon footprint of
